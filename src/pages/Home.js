@@ -1,14 +1,27 @@
 // src/pages/Home.js
-import React from "react";
+import React, { useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Container, Grid, Paper, Typography, Button } from "@mui/material";
+import {
+  Container,
+  Grid,
+  Paper,
+  Typography,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 
 const Home = () => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  const { isLoggedIn } = useAuth();
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const menuItems = [
     {
@@ -16,26 +29,26 @@ const Home = () => {
       name: "Menu 1",
       category: "Food",
       price: 10,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
       image: "https://via.placeholder.com/150",
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     },
     {
       id: 2,
       name: "Menu 2",
       category: "Drink",
       price: 5,
+      image: "https://via.placeholder.com/150",
       description:
         "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      image: "https://via.placeholder.com/150",
     },
     {
       id: 3,
       name: "Menu 3",
       category: "Snack",
       price: 3,
-      description:
-        "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
       image: "https://via.placeholder.com/150",
+      description:
+        "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
     },
   ];
 
@@ -44,7 +57,15 @@ const Home = () => {
   };
 
   const handleAddToCart = (item) => {
-    addToCart(item);
+    if (isLoggedIn) {
+      addToCart(item);
+    } else {
+      setDialogOpen(true);
+    }
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
   };
 
   return (
@@ -71,6 +92,26 @@ const Home = () => {
       <Typography variant="h4" gutterBottom>
         Available Menus
       </Typography>
+      <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+        <DialogTitle>Login Required</DialogTitle>
+        <DialogContent>
+          <Typography>
+            You need to be logged in to add items to the cart.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Close
+          </Button>
+          <Button
+            onClick={() => navigate("/login")}
+            color="primary"
+            variant="contained"
+          >
+            Login
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Grid container spacing={3}>
         {menuItems.map((item) => (
           <Grid item xs={12} sm={6} md={4} key={item.id}>
@@ -82,7 +123,8 @@ const Home = () => {
               />
               <Typography variant="h6">{item.name}</Typography>
               <Typography>Category: {item.category}</Typography>
-              <Typography>Price: {item.price}</Typography>
+              <Typography>Price: ${item.price}</Typography>
+              <Typography>{item.description}</Typography>
               <Button
                 variant="contained"
                 color="primary"
