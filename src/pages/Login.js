@@ -1,49 +1,109 @@
-// src/pages/Login.js
-import React from "react";
-import { Container, Button, TextField, Typography, Paper } from "@mui/material";
+// pages/LoginPage.js
+import * as React from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-const Login = () => {
-  const { login } = useAuth();
-  const navigate = useNavigate();
+const defaultTheme = createTheme();
 
-  const handleLogin = () => {
-    login();
-    navigate("/");
+export default function LoginPage() {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+
+    const newObj = {
+      email: data.get("email"),
+      password: data.get("password"),
+    };
+
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/api/users/login",
+        newObj
+      );
+      console.log(response);
+      login(response.data); // Pass user data to login function
+      navigate("/");
+    } catch (e) {
+      console.log(e);
+      alert("Invalid credentials");
+    }
   };
 
   return (
-    <Container sx={{ minHeight: "713px" }}>
-      <Paper elevation={3} style={{ padding: "2rem", marginTop: "2rem" }}>
-        <Typography variant="h4" gutterBottom>
-          Login
-        </Typography>
-        <TextField
-          label="Username"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Password"
-          type="password"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-        />
-        <Button
-          variant="contained"
-          color="primary"
-          fullWidth
-          onClick={handleLogin}
-          style={{ marginTop: "1rem" }}
+    <ThemeProvider theme={defaultTheme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
         >
-          Login
-        </Button>
-      </Paper>
-    </Container>
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{ mt: 3 }}
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="new-password"
+                />
+              </Grid>
+            </Grid>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign In
+            </Button>
+          </Box>
+        </Box>
+      </Container>
+    </ThemeProvider>
   );
-};
-
-export default Login;
+}

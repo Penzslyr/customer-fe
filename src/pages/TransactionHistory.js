@@ -31,7 +31,7 @@ const TransactionHistory = () => {
   ];
 
   return (
-    <Container>
+    <Container sx={{ minHeight: "725px", marginTop: "20px" }}>
       <Typography variant="h4" gutterBottom>
         Transaction History
       </Typography>

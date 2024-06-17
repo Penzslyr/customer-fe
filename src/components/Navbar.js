@@ -18,7 +18,7 @@ import { useAuth } from "../context/AuthContext";
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const { cart } = useCart();
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout, user } = useAuth();
   const navigate = useNavigate();
 
   const handleMenu = (event) => {
@@ -66,6 +66,13 @@ const Navbar = () => {
                 alt="Profile Picture"
                 src="https://via.placeholder.com/150"
               />
+              <Typography
+                variant="subtitle1"
+                component="div"
+                sx={{ paddingLeft: "5px" }}
+              >
+                {user?.email}
+              </Typography>
             </IconButton>
             <Menu
               id="menu-appbar"

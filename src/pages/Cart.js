@@ -21,6 +21,8 @@ const Cart = () => {
     return cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
   };
 
+  console.log(cart);
+
   return (
     <Container>
       <Typography variant="h4" gutterBottom>

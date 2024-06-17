@@ -11,6 +11,7 @@ import Footer from "./components/Footer";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import TransactionHistory from "./pages/TransactionHistory";
+import EditProfile from "./pages/EditProfile";
 
 function App() {
   return (
@@ -36,7 +37,7 @@ function App() {
               path="/profile"
               element={
                 <ProtectedRoute>
-                  <div>Edit Profile Page</div>
+                  <EditProfile />
                 </ProtectedRoute>
               }
             />
