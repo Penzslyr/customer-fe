@@ -10,6 +10,7 @@ import { CartProvider } from "./context/CartContext";
 import Footer from "./components/Footer";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import TransactionHistory from "./pages/TransactionHistory";
 
 function App() {
   return (
@@ -36,6 +37,15 @@ function App() {
               element={
                 <ProtectedRoute>
                   <div>Edit Profile Page</div>
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/transactions"
+              element={
+                <ProtectedRoute>
+                  <TransactionHistory />
                 </ProtectedRoute>
               }
             />

@@ -85,6 +85,13 @@ const Navbar = () => {
               <MenuItem onClick={handleClose} component={Link} to="/profile">
                 Edit Profile
               </MenuItem>
+              <MenuItem
+                onClick={handleClose}
+                component={Link}
+                to="/transactions"
+              >
+                Transaction History
+              </MenuItem>
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
           </div>
