@@ -22,7 +22,6 @@ const Cart = () => {
   };
 
   console.log(cart);
-
   return (
     <Container>
       <Typography variant="h4" gutterBottom>
