@@ -1,45 +1,67 @@
-// src/pages/EditProfile.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Typography,
   TextField,
   Button,
   Avatar,
-  Grid,
   Paper,
 } from "@mui/material";
 import { useAuth } from "../context/AuthContext";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import axios from "axios";
 
 const EditProfile = () => {
-  const { user, updateUser } = useAuth();
+  const baseURL = "http://localhost:4000/";
+  const url = "http://localhost:4000/api/users";
+  const { user } = useAuth();
   const [name, setName] = useState(user?.fullname);
   const [email, setEmail] = useState(user?.email);
-  const [date, setDate] = useState(user?.date);
   const [value, setValue] = useState(dayjs(user?.date));
-  const [profilePicture, setProfilePicture] = useState(null);
-  const [profilePictureFile, setProfilePictureFile] = useState(null);
+  const [profilePicture, setProfilePicture] = useState(
+    `${baseURL}${user?.profileImage?.filepath}`
+  );
+  const [profileImage, setProfileImage] = useState(null);
 
-  // const handleSave = () => {
-  //   const updatedUser = {
-  //     ...user,
-  //     name,
-  //     email,
-  //     profilePicture: profilePictureFile ? URL.createObjectURL(profilePictureFile) : profilePicture,
-  //   };
-  //   updateUser(updatedUser);
-  // };
+  const handleSave = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("fullname", name);
+      formData.append("email", email);
+      formData.append("date", dayjs(value).format());
+      if (profileImage) {
+        formData.append("profileImage", profileImage);
+      }
 
-  // const handleProfilePictureChange = (event) => {
-  //   const file = event.target.files[0];
-  //   setProfilePictureFile(file);
-  //   setProfilePicture(URL.createObjectURL(file));
-  // };
+      const response = await axios.put(`${url}/${user._id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log(response);
+      alert("Profile updated successfully!");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert("Failed to update profile.");
+    }
+  };
+
+  const handleProfilePictureChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setProfileImage(file);
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        setProfilePicture(fileReader.result);
+      };
+      fileReader.readAsDataURL(file);
+    }
+  };
 
   return (
     <Container sx={{ minHeight: "725px", marginTop: "20px" }}>
@@ -52,8 +74,8 @@ const EditProfile = () => {
         style={{ padding: 16, textAlign: "center", marginBottom: "15px" }}
       >
         <Avatar
-          alt="Profile Picture"
           src={profilePicture}
+          alt={user?.profileImage?.filename}
           style={{ width: "150px", height: "150px", margin: "auto" }}
         />
         <input
@@ -61,7 +83,7 @@ const EditProfile = () => {
           style={{ display: "none" }}
           id="profile-picture-upload"
           type="file"
-          // onChange={handleProfilePictureChange}
+          onChange={handleProfilePictureChange}
         />
         <label htmlFor="profile-picture-upload">
           <Button
@@ -88,29 +110,19 @@ const EditProfile = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <TextField
-          label="Date"
-          fullWidth
-          margin="normal"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-        />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={["DatePicker", "DatePicker"]}>
             <DatePicker
-              label="Controlled picker"
+              label="Date"
               value={value}
-              onChange={(newValue) => {
-                setValue(newValue);
-                console.log(dayjs(value).format());
-              }}
+              onChange={(newValue) => setValue(newValue)}
             />
           </DemoContainer>
         </LocalizationProvider>
         <Button
           variant="contained"
           color="primary"
-          // onClick={handleSave}
+          onClick={handleSave}
           style={{ marginTop: "16px" }}
         >
           Save Changes

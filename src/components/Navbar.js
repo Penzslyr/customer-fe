@@ -16,6 +16,7 @@ import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
+  const baseURL = "http://localhost:4000/";
   const [anchorEl, setAnchorEl] = React.useState(null);
   const { cart } = useCart();
   const { isLoggedIn, logout, user } = useAuth();
@@ -63,15 +64,18 @@ const Navbar = () => {
               onClick={handleMenu}
             >
               <Avatar
-                alt="Profile Picture"
-                src="https://via.placeholder.com/150"
+                // alt="Profile Picture"
+                // src="https://via.placeholder.com/150"
+                src={`${baseURL}${user?.profileImage?.filepath}`}
+                alt={user?.profileImage?.filename}
               />
+
               <Typography
                 variant="subtitle1"
                 component="div"
-                sx={{ paddingLeft: "5px" }}
+                sx={{ paddingLeft: "10px" }}
               >
-                {user?.email}
+                {user?.fullname}
               </Typography>
             </IconButton>
             <Menu
@@ -98,6 +102,13 @@ const Navbar = () => {
                 to="/transactions"
               >
                 Transaction History
+              </MenuItem>
+              <MenuItem
+                onClick={handleClose}
+                component={Link}
+                to="/changepassword"
+              >
+                Change Password
               </MenuItem>
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
