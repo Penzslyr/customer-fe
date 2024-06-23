@@ -1,4 +1,3 @@
-// src/pages/Detail.js
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import {
@@ -13,6 +12,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  MenuItem,
 } from "@mui/material";
 import { useCart } from "../context/CartContext";
 import { Star, StarBorder } from "@mui/icons-material";
@@ -20,6 +20,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Detail = () => {
   const { state } = useLocation();
@@ -27,7 +28,10 @@ const Detail = () => {
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const { isLoggedIn } = useAuth();
+  const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
+  const [reviewRate, setReviewRate] = useState(1);
+  const [reviewDesc, setReviewDesc] = useState("");
+  const { isLoggedIn, user } = useAuth();
   const navigate = useNavigate();
 
   const reviews = [
@@ -83,6 +87,23 @@ const Detail = () => {
     setDialogOpen(false);
   };
 
+  const handleReviewSubmit = async () => {
+    try {
+      const response = await axios.post("http://localhost:4000/api/reviews", {
+        accountName: user.name, // assuming you have user info in the auth context
+        reviewRate,
+        reviewDesc,
+        profilePic: user.profilePic, // assuming you have user profile pic in the auth context
+      });
+      console.log(response.data);
+      alert("Review submitted successfully!");
+      setReviewDialogOpen(false);
+    } catch (error) {
+      console.error("Error submitting review:", error);
+      alert("Failed to submit review.");
+    }
+  };
+
   return (
     <Container>
       <h1>Detail Page</h1>
@@ -103,6 +124,48 @@ const Detail = () => {
             variant="contained"
           >
             Login
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={reviewDialogOpen}
+        onClose={() => setReviewDialogOpen(false)}
+      >
+        <DialogTitle>Add Review</DialogTitle>
+        <DialogContent>
+          <TextField
+            select
+            label="Rating"
+            value={reviewRate}
+            onChange={(e) => setReviewRate(e.target.value)}
+            fullWidth
+            margin="normal"
+          >
+            {[1, 2, 3, 4, 5].map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            label="Review Description"
+            value={reviewDesc}
+            onChange={(e) => setReviewDesc(e.target.value)}
+            fullWidth
+            margin="normal"
+            multiline
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setReviewDialogOpen(false)} color="primary">
+            Cancel
+          </Button>
+          <Button
+            onClick={handleReviewSubmit}
+            color="primary"
+            variant="contained"
+          >
+            Submit
           </Button>
         </DialogActions>
       </Dialog>
@@ -158,9 +221,22 @@ const Detail = () => {
         </Grid>
       </Grid>
 
-      <Typography variant="h5" style={{ marginTop: "2rem" }}>
-        Reviews
-      </Typography>
+      <Grid
+        container
+        justifyContent="space-between"
+        alignItems="center"
+        style={{ marginTop: "2rem" }}
+      >
+        <Typography variant="h5">Reviews</Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setReviewDialogOpen(true)}
+        >
+          Add Review
+        </Button>
+      </Grid>
+
       {reviews.map((review, index) => (
         <Paper
           key={index}
