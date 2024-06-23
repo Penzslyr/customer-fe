@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Container,
   Typography,
@@ -18,10 +18,13 @@ const Cart = () => {
   };
 
   const calculateTotalPrice = () => {
-    return cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    return cart.reduce((acc, item) => acc + item.menu_price * item.quantity, 0);
   };
 
-  console.log(cart);
+  useEffect(() => {
+    console.log(cart);
+  }, []);
+
   return (
     <Container>
       <Typography variant="h4" gutterBottom>
@@ -39,8 +42,8 @@ const Cart = () => {
                 style={{ padding: 16, display: "flex" }}
               >
                 <img
-                  src={item.image}
-                  alt={item.name}
+                  src={item?.menu_img_url}
+                  alt={item.menu_name}
                   style={{
                     width: "100px",
                     height: "auto",
@@ -50,9 +53,11 @@ const Cart = () => {
                 <div style={{ flexGrow: 1 }}>
                   {" "}
                   {/* Allow description area to grow */}
-                  <Typography variant="h6">{item.name}</Typography>
-                  <Typography variant="body1">{item.category}</Typography>
-                  <Typography variant="body1">Price: {item.price}</Typography>
+                  <Typography variant="h6">{item.menu_name}</Typography>
+                  <Typography variant="body1">{item.menu_category}</Typography>
+                  <Typography variant="body1">
+                    Price: {item.menu_price}
+                  </Typography>
                   <div style={{ paddingTop: "20px" }}>
                     <TextField
                       type="number"

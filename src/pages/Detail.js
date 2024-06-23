@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import {
   Container,
@@ -33,27 +33,22 @@ const Detail = () => {
   const [reviewDesc, setReviewDesc] = useState("");
   const { isLoggedIn, user } = useAuth();
   const navigate = useNavigate();
+  const [reviews, setReviews] = useState([]);
 
-  const reviews = [
-    {
-      accountName: "John Doe",
-      reviewDesc: "Great food!",
-      reviewRate: 5,
-      profilePic: "https://via.placeholder.com/50",
-    },
-    {
-      accountName: "Jane Smith",
-      reviewDesc: "Good taste but a bit pricey.",
-      reviewRate: 4,
-      profilePic: "https://via.placeholder.com/50",
-    },
-    {
-      accountName: "Alice Johnson",
-      reviewDesc: "Average experience.",
-      reviewRate: 3,
-      profilePic: "https://via.placeholder.com/50",
-    },
-  ];
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:4000/api/reviews/getbymenu/${menuItem._id}`
+        );
+        setReviews(response.data);
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      }
+    };
+
+    fetchReviews();
+  }, [menuItem._id]);
 
   const handleAddToCart = () => {
     if (isLoggedIn) {
@@ -89,15 +84,25 @@ const Detail = () => {
 
   const handleReviewSubmit = async () => {
     try {
-      const response = await axios.post("http://localhost:4000/api/reviews", {
-        accountName: user.name, // assuming you have user info in the auth context
-        reviewRate,
-        reviewDesc,
-        profilePic: user.profilePic, // assuming you have user profile pic in the auth context
-      });
+      const response = await axios.post(
+        "http://localhost:4000/api/reviews/create",
+        {
+          accountId: user._id, // assuming you have user info in the auth context
+          menuId: menuItem._id,
+          review_rate: reviewRate,
+          review_desc: reviewDesc,
+          userId: user._id,
+        },
+        { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
+      );
       console.log(response.data);
       alert("Review submitted successfully!");
       setReviewDialogOpen(false);
+      // Re-fetch reviews to show the newly added review
+      const reviewsResponse = await axios.get(
+        `http://localhost:4000/api/reviews/getbymenu/${menuItem._id}`
+      );
+      setReviews(reviewsResponse.data);
     } catch (error) {
       console.error("Error submitting review:", error);
       alert("Failed to submit review.");
@@ -172,16 +177,16 @@ const Detail = () => {
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <img
-            src={menuItem.image}
-            alt={menuItem.name}
+            src={menuItem?.menu_img_url}
+            alt={menuItem.menu_name}
             style={{ width: "100%", height: "auto" }}
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <Paper elevation={3} style={{ padding: 16 }}>
-            <Typography variant="h4">{menuItem.name}</Typography>
-            <Typography variant="body1">{menuItem.description}</Typography>
-            <Typography variant="h6">Price: ${menuItem.price}</Typography>
+            <Typography variant="h4">{menuItem.menu_name}</Typography>
+            <Typography variant="body1">{menuItem.menu_desc}</Typography>
+            <Typography variant="h6">Price: ${menuItem.menu_price}</Typography>
             <Grid
               container
               alignItems="center"
@@ -246,16 +251,19 @@ const Detail = () => {
           <Grid container spacing={2} alignItems="center">
             <Grid item>
               <img
-                src={review.profilePic}
-                alt={review.accountName}
+                src={
+                  `http://localhost:4000/${review.accountId.profileImage.filepath}` ||
+                  "https://via.placeholder.com/50"
+                }
+                alt={review.accountId.fullname}
                 style={{ borderRadius: "50%", width: "50px", height: "50px" }}
               />
             </Grid>
             <Grid item xs>
-              <Typography variant="h6">{review.accountName}</Typography>
-              <Typography variant="body2">{review.reviewDesc}</Typography>
+              <Typography variant="h6">{review.accountId.fullname}</Typography>
+              <Typography variant="body2">{review.review_desc}</Typography>
               <Grid container alignItems="center">
-                {renderStars(review.reviewRate)}
+                {renderStars(review.review_rate)}
               </Grid>
             </Grid>
           </Grid>
