@@ -38,7 +38,7 @@ const Cart = () => {
             {cart.map((item) => (
               <Paper
                 elevation={3}
-                key={item.id}
+                key={item._id}
                 style={{ padding: 16, display: "flex" }}
               >
                 <img
@@ -64,7 +64,7 @@ const Cart = () => {
                       label="Quantity"
                       value={item.quantity}
                       onChange={(e) =>
-                        handleQuantityChange(item.id, parseInt(e.target.value))
+                        handleQuantityChange(item._id, parseInt(e.target.value))
                       }
                       inputProps={{ min: "1", step: "1" }}
                       style={{ width: "150px" }}
@@ -72,7 +72,7 @@ const Cart = () => {
                     <Button
                       variant="contained"
                       color="secondary"
-                      onClick={() => removeFromCart(item.id)}
+                      onClick={() => removeFromCart(item._id)}
                       style={{ marginLeft: "8px", height: "56px" }}
                     >
                       Remove
