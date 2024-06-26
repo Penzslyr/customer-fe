@@ -23,9 +23,16 @@ const TransactionHistory = () => {
     const fetchTransactions = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/api/transactions/getbyuser/${userId}`
+          `http://localhost:4000/api/transactions/getbyuser/${userId}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
         );
         setTransactions(response.data);
+        console.log(response);
+        console.log(user);
       } catch (error) {
         console.error("Error fetching transactions:", error);
       } finally {
@@ -34,7 +41,7 @@ const TransactionHistory = () => {
     };
 
     fetchTransactions();
-  }, [userId]);
+  }, []);
 
   if (loading) {
     return (
