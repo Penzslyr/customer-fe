@@ -2,12 +2,14 @@ import { CssBaseline, Box, Toolbar } from "@mui/material";
 
 import { Outlet } from "react-router-dom";
 import Navbar from "..Navbar/components/Navbar";
+import { useAuth } from "../context/AuthContext";
 
 export default function Root() {
+  const user = useAuth();
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <Navbar/>
+      <Navbar />
       <Box
         component="main"
         sx={{

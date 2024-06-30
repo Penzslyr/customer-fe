@@ -3,8 +3,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
@@ -18,7 +16,7 @@ import { useAuth } from "../context/AuthContext";
 
 const defaultTheme = createTheme();
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -27,13 +25,15 @@ export default function LoginPage() {
     const data = new FormData(event.currentTarget);
 
     const newObj = {
+      fullname: data.get("fullname"),
       email: data.get("email"),
       password: data.get("password"),
+      date: data.get("date"),
     };
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/users/login",
+        "http://localhost:4000/api/users",
         newObj
       );
       console.log(response);
@@ -41,7 +41,7 @@ export default function LoginPage() {
       navigate("/");
     } catch (e) {
       console.log(e);
-      alert("Invalid credentials");
+      alert("Registration failed");
     }
   };
 
@@ -74,11 +74,12 @@ export default function LoginPage() {
               color: "white",
               p: 3,
               borderRadius: 1,
+              textAlign: "center",
             }}
           >
             <Typography
               component="h1"
-              variant="h3"
+              variant="h2"
               align="center"
               sx={{
                 fontFamily: "'Roboto', sans-serif",
@@ -105,7 +106,7 @@ export default function LoginPage() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              Register
             </Typography>
             <Box
               component="form"
@@ -117,11 +118,20 @@ export default function LoginPage() {
                 margin="normal"
                 required
                 fullWidth
+                id="fullname"
+                label="Full Name"
+                name="fullname"
+                autoComplete="name"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
                 id="email"
                 label="Email Address"
                 name="email"
                 autoComplete="email"
-                autoFocus
               />
               <TextField
                 margin="normal"
@@ -133,9 +143,17 @@ export default function LoginPage() {
                 id="password"
                 autoComplete="current-password"
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="date"
+                label="Date of Birth"
+                name="date"
+                type="date"
+                InputLabelProps={{
+                  shrink: true,
+                }}
               />
               <Button
                 type="submit"
@@ -143,17 +161,12 @@ export default function LoginPage() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign In
+                Register
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link href="/register" variant="body2">
-                    {"Don't have an account? Sign Up"}
+                  <Link href="/login" variant="body2">
+                    Already have an account? Sign in
                   </Link>
                 </Grid>
               </Grid>
