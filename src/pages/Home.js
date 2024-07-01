@@ -12,6 +12,7 @@ import {
   DialogContent,
   DialogActions,
   ButtonGroup,
+  TextField,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
@@ -26,6 +27,7 @@ const Home = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [filteredMenuItems, setFilteredMenuItems] = useState([]);
   const [category, setCategory] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchMenuItems = async () => {
@@ -59,13 +61,31 @@ const Home = () => {
 
   const handleCategoryChange = (category) => {
     setCategory(category);
-    if (category === "All") {
-      setFilteredMenuItems(menuItems);
-    } else {
-      setFilteredMenuItems(
-        menuItems.filter((item) => item.menu_category === category)
+    filterMenuItems(searchQuery, category);
+  };
+
+  const handleSearchChange = (event) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+    filterMenuItems(query, category);
+  };
+
+  const filterMenuItems = (query, category) => {
+    let filteredItems = menuItems;
+
+    if (category !== "All") {
+      filteredItems = filteredItems.filter(
+        (item) => item.menu_category === category
       );
     }
+
+    if (query) {
+      filteredItems = filteredItems.filter((item) =>
+        item.menu_name.toLowerCase().includes(query.toLowerCase())
+      );
+    }
+
+    setFilteredMenuItems(filteredItems);
   };
 
   const defaultImage = "https://via.placeholder.com/150";
@@ -113,10 +133,19 @@ const Home = () => {
         Available Menus
       </Typography>
 
+      <TextField
+        label="Search Menu"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        value={searchQuery}
+        onChange={handleSearchChange}
+      />
+
       <ButtonGroup
         variant="contained"
         aria-label="outlined primary button group"
-        style={{ marginBottom: 20 }}
+        style={{ marginBottom: 20, marginTop: 20 }}
       >
         <Button onClick={() => handleCategoryChange("All")}>All</Button>
         <Button onClick={() => handleCategoryChange("Food")}>Food</Button>
@@ -180,7 +209,7 @@ const Home = () => {
                 {item.menu_name}
               </Typography>
               <Typography>Category: {item.menu_category}</Typography>
-              <Typography>Price: ${item.menu_price}</Typography>
+              <Typography>Price: Rp. {item.menu_price}</Typography>
               <Typography>{item.menu_desc}</Typography>
               <Button
                 variant="contained"

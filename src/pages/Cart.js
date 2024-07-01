@@ -164,7 +164,7 @@ const Cart = () => {
               <Typography variant="h6">Cart Summary</Typography>
               <Typography>Total Items: {cart.length}</Typography>
               <Typography sx={{ paddingBottom: 2 }}>
-                Total Price: ${totalPrice.toFixed(2)}
+                Total Price: Rp. {totalPrice.toFixed(2)}
               </Typography>
               <FormControl fullWidth>
                 <InputLabel id="promo-select-label">Promo Code</InputLabel>
@@ -176,7 +176,7 @@ const Cart = () => {
                 >
                   {promos.map((promo) => (
                     <MenuItem key={promo._id} value={promo._id}>
-                      {promo.promo_code} - Discount: ${promo.promo_price}
+                      {promo.promo_code} - Discount: Rp. {promo.promo_price}
                     </MenuItem>
                   ))}
                 </Select>

@@ -90,13 +90,13 @@ const TransactionHistory = () => {
                   </ListItemAvatar>
                   <ListItemText
                     primary={`${item.menu_name} - ${item.quantity} pcs`}
-                    secondary={`Price: $${item.price * item.quantity}`}
+                    secondary={`Price: Rp.${item.price * item.quantity}`}
                   />
                 </ListItem>
               ))}
             </List>
             <Typography variant="body1">
-              Total: ${transaction.t_total}
+              Total: Rp. {transaction.t_total}
             </Typography>
           </Paper>
         ))

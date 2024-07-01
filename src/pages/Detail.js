@@ -186,7 +186,9 @@ const Detail = () => {
           <Paper elevation={3} style={{ padding: 16 }}>
             <Typography variant="h4">{menuItem.menu_name}</Typography>
             <Typography variant="body1">{menuItem.menu_desc}</Typography>
-            <Typography variant="h6">Price: ${menuItem.menu_price}</Typography>
+            <Typography variant="h6">
+              Price: Rp.{menuItem.menu_price}
+            </Typography>
             <Grid
               container
               alignItems="center"
