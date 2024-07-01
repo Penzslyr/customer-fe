@@ -71,23 +71,41 @@ const Home = () => {
   const defaultImage = "https://via.placeholder.com/150";
 
   return (
-    <Container>
-      <h1>Home Page</h1>
+    <Container maxWidth="xl">
+      <div style={{ marginBottom: "20px" }}></div>
       <Carousel
         autoPlay
         interval={3000}
         infiniteLoop
         showThumbs={false}
         showStatus={false}
+        dynamicHeight={false}
+        emulateTouch={true}
+        style={{ width: "100%", maxHeight: "500px" }}
       >
         <div>
-          <img src="https://via.placeholder.com/800x400" alt="Slide 1" />
+          <img
+            src="https://www.dompetdhuafa.org/wp-content/uploads/2021/11/PHOTO-2021-11-29-11-15-48_1.jpg"
+            alt="Slide 1"
+            width={1920}
+            height={600}
+          />
         </div>
         <div>
-          <img src="https://via.placeholder.com/800x400" alt="Slide 2" />
+          <img
+            src="https://images.tokopedia.net/img/mNFjrc/2022/9/5/02b9f407-6d47-4c9e-a451-3be698cfb448.jpg"
+            alt="Slide 2"
+            width={1920}
+            height={600}
+          />
         </div>
         <div>
-          <img src="https://via.placeholder.com/800x400" alt="Slide 3" />
+          <img
+            src="https://awsimages.detik.net.id/community/media/visual/2023/12/14/menu-angkringan_169.jpeg?w=1200"
+            alt="Slide 3"
+            width={1920}
+            height={600}
+          />
         </div>
       </Carousel>
 

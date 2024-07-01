@@ -45,7 +45,7 @@ const Navbar = () => {
           sx={{ flexGrow: 1 }}
           onClick={() => navigate("/")}
         >
-          MyApp
+          Angkringan Bonsuwong
         </Typography>
         <IconButton color="inherit" component={Link} to="/cart">
           <Badge badgeContent={cart.length} color="secondary">
