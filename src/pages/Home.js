@@ -29,12 +29,23 @@ const Home = () => {
   const [category, setCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
+  const categoryOrder = {
+    Food: 1,
+    Snack: 2,
+    Beverage: 3,
+    Other: 4,
+  };
+
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
         const response = await axios.get("http://localhost:4000/api/menus");
-        setMenuItems(response.data);
-        setFilteredMenuItems(response.data);
+        const sortedItems = response.data.sort(
+          (a, b) =>
+            categoryOrder[a.menu_category] - categoryOrder[b.menu_category]
+        );
+        setMenuItems(sortedItems);
+        setFilteredMenuItems(sortedItems);
       } catch (error) {
         console.error("Error fetching menu items:", error);
       }
@@ -147,11 +158,52 @@ const Home = () => {
         aria-label="outlined primary button group"
         style={{ marginBottom: 20, marginTop: 20 }}
       >
-        <Button onClick={() => handleCategoryChange("All")}>All</Button>
-        <Button onClick={() => handleCategoryChange("Food")}>Food</Button>
-        <Button onClick={() => handleCategoryChange("Drink")}>Drink</Button>
-        <Button onClick={() => handleCategoryChange("Snack")}>Snack</Button>
-        <Button onClick={() => handleCategoryChange("Other")}>Other</Button>
+        <Button
+          onClick={() => handleCategoryChange("All")}
+          sx={{
+            backgroundColor: category === "All" ? "primary.main" : "default",
+            color: category === "All" ? "white" : "black",
+          }}
+        >
+          All
+        </Button>
+        <Button
+          onClick={() => handleCategoryChange("Food")}
+          sx={{
+            backgroundColor: category === "Food" ? "primary.main" : "default",
+            color: category === "Food" ? "white" : "black",
+          }}
+        >
+          Food
+        </Button>
+        <Button
+          onClick={() => handleCategoryChange("Beverage")}
+          sx={{
+            backgroundColor:
+              category === "Beverage" ? "primary.main" : "default",
+            color: category === "Beverage" ? "white" : "black",
+          }}
+        >
+          Beverage
+        </Button>
+        <Button
+          onClick={() => handleCategoryChange("Snack")}
+          sx={{
+            backgroundColor: category === "Snack" ? "primary.main" : "default",
+            color: category === "Snack" ? "white" : "black",
+          }}
+        >
+          Snack
+        </Button>
+        <Button
+          onClick={() => handleCategoryChange("Other")}
+          sx={{
+            backgroundColor: category === "Other" ? "primary.main" : "default",
+            color: category === "Other" ? "white" : "black",
+          }}
+        >
+          Other
+        </Button>
       </ButtonGroup>
 
       <Dialog open={dialogOpen} onClose={handleCloseDialog}>
@@ -188,9 +240,8 @@ const Home = () => {
             <Paper
               elevation={3}
               style={{
-                padding: 16,
+                padding: 7,
                 height: "100%",
-                marginBottom: 16,
                 marginTop: 16,
               }}
               variant="outlined"
@@ -210,7 +261,6 @@ const Home = () => {
               </Typography>
               <Typography>Category: {item.menu_category}</Typography>
               <Typography>Price: Rp. {item.menu_price}</Typography>
-              <Typography>{item.menu_desc}</Typography>
               <Button
                 variant="contained"
                 color="primary"

@@ -9,15 +9,22 @@ import {
   ListItemAvatar,
   Avatar,
   CircularProgress,
+  TextField,
 } from "@mui/material";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 
 const TransactionHistory = () => {
   const { user } = useAuth();
   const [transactions, setTransactions] = useState([]);
+  const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const userId = user._id; // you can also get this from context if it's dynamic
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -31,8 +38,7 @@ const TransactionHistory = () => {
           }
         );
         setTransactions(response.data);
-        console.log(response);
-        console.log(user);
+        setFilteredTransactions(response.data); // Initialize filtered transactions with all transactions
       } catch (error) {
         console.error("Error fetching transactions:", error);
       } finally {
@@ -41,7 +47,23 @@ const TransactionHistory = () => {
     };
 
     fetchTransactions();
-  }, []);
+  }, [userId]);
+
+  useEffect(() => {
+    if (!startDate && !endDate) {
+      setFilteredTransactions(transactions);
+    } else {
+      const filtered = transactions.filter((transaction) => {
+        const transactionDate = dayjs(transaction.t_date);
+        return (
+          (!startDate ||
+            transactionDate.isAfter(startDate.subtract(1, "day"))) &&
+          (!endDate || transactionDate.isBefore(endDate.add(1, "day")))
+        );
+      });
+      setFilteredTransactions(filtered);
+    }
+  }, [startDate, endDate, transactions]);
 
   if (loading) {
     return (
@@ -64,18 +86,38 @@ const TransactionHistory = () => {
       <Typography variant="h4" gutterBottom>
         Transaction History
       </Typography>
-      {transactions.length === 0 ? (
+      <Typography variant="h6" gutterBottom>
+        Choose range date of the transactions
+      </Typography>
+      <div style={{ display: "flex", marginTop: 10, marginBottom: 20 }}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            label="Start Date"
+            value={startDate}
+            onChange={(newValue) => setStartDate(newValue)}
+            renderInput={(params) => <TextField {...params} />}
+          />
+          <div style={{ padding: 10 }} />
+          <DatePicker
+            label="End Date"
+            value={endDate}
+            onChange={(newValue) => setEndDate(newValue)}
+            renderInput={(params) => <TextField {...params} />}
+          />
+        </LocalizationProvider>
+      </div>
+
+      {filteredTransactions.length === 0 ? (
         <Typography variant="body1">No transactions found.</Typography>
       ) : (
-        transactions.map((transaction) => (
+        filteredTransactions.map((transaction) => (
           <Paper
             key={transaction._id}
             elevation={3}
             style={{ padding: 16, marginBottom: 16 }}
           >
             <Typography variant="h6">
-              Transaction Date:{" "}
-              {new Date(transaction.t_date).toLocaleDateString()}
+              Transaction Date: {dayjs(transaction.t_date).toString()}
             </Typography>
             <List>
               {transaction.t_items.map((item, index) => (
