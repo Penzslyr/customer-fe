@@ -18,7 +18,7 @@ const Footer = () => {
     >
       <Container>
         <Typography variant="body1" align="center">
-          © 2024 Your Company Name
+          © 2024 Angkringan Bonsuwong
         </Typography>
         <Typography
           variant="body2"

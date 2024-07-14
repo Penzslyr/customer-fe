@@ -177,7 +177,7 @@ const Detail = () => {
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <img
-            src={menuItem?.menu_img_url}
+            src={menuItem?.menu_img.filepath}
             alt={menuItem.menu_name}
             style={{ width: "100%", height: "auto" }}
           />
@@ -254,7 +254,7 @@ const Detail = () => {
             <Grid item>
               <img
                 src={
-                  `https://angkringan-backend-git-release-penzslyrs-projects.vercel.app/${review.accountId.profileImage.filepath}` ||
+                  `${review.accountId.profileImage.filepath}` ||
                   "https://via.placeholder.com/50"
                 }
                 alt={review.accountId.fullname}

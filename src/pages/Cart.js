@@ -112,13 +112,13 @@ const Cart = () => {
               <div style={{ paddingTop: 10 }} key={item._id}>
                 <Paper elevation={3} style={{ padding: 16, display: "flex" }}>
                   <img
-                    src={item?.menu_img_url}
+                    src={item?.menu_img.filepath}
                     alt={item.menu_name}
                     style={{
                       maxHeight: "200px",
                       maxWidth: "200px",
-                      width: "auto",
-                      height: "auto",
+                      width: "200px",
+                      height: "200px",
                       marginRight: "16px",
                     }}
                   />

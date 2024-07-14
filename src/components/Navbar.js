@@ -67,7 +67,7 @@ const Navbar = () => {
               <Avatar
                 // alt="Profile Picture"
                 // src="https://via.placeholder.com/150"
-                src={`${baseURL}${user?.profileImage?.filename}`}
+                src={`${user?.profileImage?.filepath}`}
                 alt={user?.profileImage?.filename}
               />
 

@@ -124,7 +124,7 @@ const TransactionHistory = () => {
                 <ListItem key={index}>
                   <ListItemAvatar>
                     <Avatar
-                      src={`https://angkringan-backend-git-release-penzslyrs-projects.vercel.app/${item.menu_id.menu_img.filepath}`}
+                      src={`${item.menu_id.menu_img.filepath}`}
                       sx={{ width: 45, height: 45 }}
                     >
                       {item.menu_name.charAt(0)}

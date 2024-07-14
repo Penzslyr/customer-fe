@@ -25,7 +25,7 @@ const EditProfile = () => {
   const [email, setEmail] = useState(user?.email);
   const [value, setValue] = useState(dayjs(user?.date));
   const [profilePicture, setProfilePicture] = useState(
-    `${baseURL}${user?.profileImage?.filepath}`
+    `${user?.profileImage?.filepath}`
   );
   const [profileImage, setProfileImage] = useState(null);
 
