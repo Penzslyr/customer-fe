@@ -29,11 +29,13 @@ export default function RegisterPage() {
       email: data.get("email"),
       password: data.get("password"),
       date: data.get("date"),
+      isAdmin: false,
+      isManager: false,
     };
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/users",
+        "https://angkringan-backend-git-release-penzslyrs-projects.vercel.app/api/users",
         newObj
       );
       console.log(response);
