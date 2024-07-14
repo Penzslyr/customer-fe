@@ -30,7 +30,7 @@ const TransactionHistory = () => {
     const fetchTransactions = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/api/transactions/getbyuser/${userId}`,
+          `https://angkringan-backend-git-release-penzslyrs-projects.vercel.app/api/transactions/getbyuser/${userId}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -124,7 +124,7 @@ const TransactionHistory = () => {
                 <ListItem key={index}>
                   <ListItemAvatar>
                     <Avatar
-                      src={`http://localhost:4000/${item.menu_id.menu_img.filepath}`}
+                      src={`https://angkringan-backend-git-release-penzslyrs-projects.vercel.app/${item.menu_id.menu_img.filepath}`}
                       sx={{ width: 45, height: 45 }}
                     >
                       {item.menu_name.charAt(0)}

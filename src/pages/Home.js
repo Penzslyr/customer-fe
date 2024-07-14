@@ -39,7 +39,9 @@ const Home = () => {
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/api/menus");
+        const response = await axios.get(
+          "https://angkringan-backend-git-release-penzslyrs-projects.vercel.app/api/menus"
+        );
         const sortedItems = response.data.sort(
           (a, b) =>
             categoryOrder[a.menu_category] - categoryOrder[b.menu_category]
@@ -248,11 +250,7 @@ const Home = () => {
               square={false}
             >
               <img
-                src={
-                  item.menu_img
-                    ? `http://localhost:4000/${item.menu_img.filepath}`
-                    : defaultImage
-                }
+                src={item.menu_img ? `${item.menu_img.filepath}` : defaultImage}
                 alt={item.menu_name}
                 style={{ width: "100%", height: "200px", objectFit: "cover" }}
               />

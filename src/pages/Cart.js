@@ -29,7 +29,9 @@ const Cart = () => {
     // Fetch promos
     const fetchPromos = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/api/promos");
+        const response = await axios.get(
+          "https://angkringan-backend-git-release-penzslyrs-projects.vercel.app/api/promos"
+        );
         setPromos(response.data);
       } catch (error) {
         console.error("Error fetching promos:", error);
@@ -71,7 +73,7 @@ const Cart = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/transactions",
+        "https://angkringan-backend-git-release-penzslyrs-projects.vercel.app/api/transactions",
         transactionData,
         {
           headers: {

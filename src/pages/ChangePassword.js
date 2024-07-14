@@ -17,7 +17,7 @@ const ChangePassword = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/users/reset-password",
+        "https://angkringan-backend-git-release-penzslyrs-projects.vercel.app/users/reset-password",
         new URLSearchParams({
           email: user.email,
           prevPassword,

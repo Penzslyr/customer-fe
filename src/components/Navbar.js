@@ -16,7 +16,8 @@ import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
-  const baseURL = "http://localhost:4000/";
+  const baseURL =
+    "https://res.cloudinary.com/dfspmwi3z/image/upload/v1720984439/";
   const [anchorEl, setAnchorEl] = React.useState(null);
   const { cart } = useCart();
   const { isLoggedIn, logout, user } = useAuth();
@@ -66,7 +67,7 @@ const Navbar = () => {
               <Avatar
                 // alt="Profile Picture"
                 // src="https://via.placeholder.com/150"
-                src={`${baseURL}${user?.profileImage?.filepath}`}
+                src={`${baseURL}${user?.profileImage?.filename}`}
                 alt={user?.profileImage?.filename}
               />
 
