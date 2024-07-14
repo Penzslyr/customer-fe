@@ -30,7 +30,7 @@ const TransactionHistory = () => {
     const fetchTransactions = async () => {
       try {
         const response = await axios.get(
-          `https://angkringan-backend-git-release-penzslyrs-projects.vercel.app/api/transactions/getbyuser/${userId}`,
+          `https://angkringan-backend.vercel.app/api/transactions/getbyuser/${userId}`,
           {
             headers: {
               "Content-Type": "application/json",

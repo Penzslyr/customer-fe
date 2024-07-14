@@ -39,7 +39,7 @@ const Detail = () => {
     const fetchReviews = async () => {
       try {
         const response = await axios.get(
-          `https://angkringan-backend-git-release-penzslyrs-projects.vercel.app/api/reviews/getbymenu/${menuItem._id}`
+          `https://angkringan-backend.vercel.app/api/reviews/getbymenu/${menuItem._id}`
         );
         setReviews(response.data);
       } catch (error) {
@@ -85,7 +85,7 @@ const Detail = () => {
   const handleReviewSubmit = async () => {
     try {
       const response = await axios.post(
-        "https://angkringan-backend-git-release-penzslyrs-projects.vercel.app/api/reviews/create",
+        "https://angkringan-backend.vercel.app/api/reviews/create",
         {
           accountId: user._id, // assuming you have user info in the auth context
           menuId: menuItem._id,
@@ -100,7 +100,7 @@ const Detail = () => {
       setReviewDialogOpen(false);
       // Re-fetch reviews to show the newly added review
       const reviewsResponse = await axios.get(
-        `https://angkringan-backend-git-release-penzslyrs-projects.vercel.app/api/reviews/getbymenu/${menuItem._id}`
+        `https://angkringan-backend.vercel.app/api/reviews/getbymenu/${menuItem._id}`
       );
       setReviews(reviewsResponse.data);
     } catch (error) {

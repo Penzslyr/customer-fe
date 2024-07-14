@@ -35,7 +35,7 @@ export default function RegisterPage() {
 
     try {
       const response = await axios.post(
-        "https://angkringan-backend-git-release-penzslyrs-projects.vercel.app/api/users",
+        "https://angkringan-backend.vercel.app/api/users",
         newObj
       );
       console.log(response);

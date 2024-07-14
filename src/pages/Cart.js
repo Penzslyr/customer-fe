@@ -30,7 +30,7 @@ const Cart = () => {
     const fetchPromos = async () => {
       try {
         const response = await axios.get(
-          "https://angkringan-backend-git-release-penzslyrs-projects.vercel.app/api/promos"
+          "https://angkringan-backend.vercel.app/api/promos"
         );
         setPromos(response.data);
       } catch (error) {
@@ -73,7 +73,7 @@ const Cart = () => {
 
     try {
       const response = await axios.post(
-        "https://angkringan-backend-git-release-penzslyrs-projects.vercel.app/api/transactions",
+        "https://angkringan-backend.vercel.app/api/transactions",
         transactionData,
         {
           headers: {

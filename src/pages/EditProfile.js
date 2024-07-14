@@ -16,10 +16,8 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import axios from "axios";
 
 const EditProfile = () => {
-  const baseURL =
-    "https://angkringan-backend-git-release-penzslyrs-projects.vercel.app/";
-  const url =
-    "https://angkringan-backend-git-release-penzslyrs-projects.vercel.app/api/users";
+  const baseURL = "https://angkringan-backend.vercel.app/";
+  const url = "https://angkringan-backend.vercel.app/api/users";
   const { user } = useAuth();
   const [name, setName] = useState(user?.fullname);
   const [email, setEmail] = useState(user?.email);

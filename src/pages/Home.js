@@ -40,7 +40,7 @@ const Home = () => {
     const fetchMenuItems = async () => {
       try {
         const response = await axios.get(
-          "https://angkringan-backend-git-release-penzslyrs-projects.vercel.app/api/menus"
+          "https://angkringan-backend.vercel.app/api/menus"
         );
         const sortedItems = response.data.sort(
           (a, b) =>
