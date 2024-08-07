@@ -73,7 +73,7 @@ const Cart = () => {
 
     try {
       const response = await axios.post(
-        "https://angkringan-backend.vercel.app/api/transactions",
+        "http://localhost:4000/api/transactions",
         transactionData,
         {
           headers: {
@@ -81,10 +81,36 @@ const Cart = () => {
           },
         }
       );
-      console.log(response.data);
+      console.log(response.data.transaction);
+      window.snap.pay(response.data.transaction.token, {
+        onSuccess: async function (result) {
+          console.log("Payment success:", result);
+
+          try {
+            const response1 = await axios.put(
+              `http://localhost:4000/api/transactions/${response.data.newTransaction._id}`,
+              { t_status: "Completed" }
+            );
+            console.log(response1);
+            navigate("/transactions"); // Redirect to transaction history
+          } catch (error) {
+            console.error("Error updating transaction:", error);
+          }
+        },
+        onPending: function (result) {
+          console.log("Payment pending:", result);
+        },
+        onError: function (result) {
+          console.log("Payment error:", result);
+        },
+        onClose: function () {
+          console.log(
+            "Payment popup closed without finishing the transaction."
+          );
+        },
+      });
       alert("Checkout successful! Please proceed with payment.");
       clearCart(); // Clear the cart
-      navigate("/transactions"); // Redirect to transaction history
     } catch (error) {
       console.error("Error during checkout:", error);
       alert("Checkout failed. Please try again.");

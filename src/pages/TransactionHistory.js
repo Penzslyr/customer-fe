@@ -16,6 +16,11 @@ import { useAuth } from "../context/AuthContext";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const TransactionHistory = () => {
   const { user } = useAuth();
@@ -117,7 +122,12 @@ const TransactionHistory = () => {
             style={{ padding: 16, marginBottom: 16 }}
           >
             <Typography variant="h6">
-              Transaction Date: {dayjs(transaction.t_date).toString()}
+              Transaction Date : {}
+              {dayjs
+                .utc(transaction.t_date)
+                .tz("Asia/Jakarta")
+                .format("MMMM D, YYYY h:mm A")
+                .toString()}
             </Typography>
             <List>
               {transaction.t_items.map((item, index) => (
@@ -137,6 +147,9 @@ const TransactionHistory = () => {
                 </ListItem>
               ))}
             </List>
+            <Typography variant="body1">
+              Status: {transaction.t_status}
+            </Typography>
             <Typography variant="body1">
               Total: Rp. {transaction.t_total}
             </Typography>
